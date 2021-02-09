@@ -1,0 +1,51 @@
+<!doctype html>
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block style %}
+<style>
+  #fixedbutton1 {
+    position: fixed;
+    top: 100px;
+    right: 25px;
+  }
+
+  #fixedbutton2 {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .link-text {
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
+{% block add_new_problem_active %} active {% endblock %}
+
+{% block body %}
+<div class="container">
+
+  {% if messages %}
+  <div class="" style="width: 100%;">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show mt-3"
+      style="width:100%" role="alert">
+
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% for category_wise_list in problems_list %} <span>#<a href="#{{category_wise_list.category|cut:' '}}">{{category_wise_list.category}} </a></span>{% endfor %}
+
+  <div class="my-3">
+    <form action="/codingproblems/newproblem" method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" value="Submit" class="btn btn-primary my-3">
+      </form>
+  </div>
+{% endblock %}

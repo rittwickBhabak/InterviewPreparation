@@ -1,0 +1,40 @@
+<!doctype html>
+{% extends "base.html" %}
+{% block style %}
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if messages %}
+    <div class="" style="width: 100%;">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show mt-3"
+            style="width:100%" role="alert">
+
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="my-4">
+        <h1>{{problem.problem_statement}} <span><a class="btn btn-warning" href="/codingproblems/updateproblem/{{problem.pk}}">Update Problem Statement?</a></span> <span><a class="btn btn-warning" href="/codingproblems/newsolution/{{problem.pk}}">Add Another Solution?</a></span></h1>
+        {% for solution in solutions %}
+        <div class="card my-3">
+            <h5 class="card-header">{{solution.title}}</h5>
+            <div class="card-body">
+              <!-- <h5 class="card-title">Special title treatment</h5> -->
+              <p class="card-text">{{solution.language}}</p>
+              <a href="/codingproblems/solution/{{solution.pk}}" class="btn btn-primary">View the solution</a>
+            </div>
+          </div>
+        {% endfor %}
+        
+    </div>
+
+
+    {% endblock %}

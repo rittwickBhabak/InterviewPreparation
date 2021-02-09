@@ -1,0 +1,50 @@
+<!doctype html>
+{% extends "base.html" %}
+{% block style %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container my-3">
+
+    {% if messages %}
+    <div class="" style="width: 100%;">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show mt-3"
+            style="width:100%" role="alert">
+
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <ul>
+        {% if search_list_codingproblems %}
+            <h2>Result(s) from Problem Statements</h2>
+            {% for result in search_list_codingproblems %}
+            <li><a href="/codingproblems/problem/{{result.pk}}">{{result}}</a></li>
+            {% endfor %}
+        {% else %}
+            <h2>No match found from Problem Statements</h2>
+        {% endif %}
+    </ul>
+
+    <ul>
+        {% if search_list_solutions %}
+            <h2>Result(s) from Solution Titles</h2>
+            {% for result in search_list_solutions %}
+            <li><a href="/codingproblems/solution/{{result.pk}}">{{result.problem_id.problem_statement}}| Solution: {{result.title}}</a></li>
+            {% endfor %}
+        {% else %}
+            <h2>No match found from Solutions</h2>
+        {% endif %}
+    </ul>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+<!doctype html>
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'prism/prism.css' %}">
+<script src="{% static 'prism/jQuery.js' %}"></script>
+<script src="{% static 'prism/prism.js' %}"></script>
+<style>
+    #fixedbutton1 {
+        position: fixed;
+        top: 100px;
+        right: 25px;
+    }
+
+    #fixedbutton2 {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .link-text {
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if messages %}
+    <div class="" style="width: 100%;">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show mt-3"
+            style="width:100%" role="alert">
+
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h1 class="text-center my-3">{{solution.problem_id.problem_statement}}
+        <span>
+            <a href="/codingproblems/updatesolution/{{solution.pk}}" class="btn btn-warning">Update
+                Solution?</a>
+        </span>
+    </h1>
+    <h2>
+        Solution: <span>{{solution.title}}</span>
+    </h2>
+
+    <button type="button" class="btn btn-danger float-end mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Delete Solution?
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm to delete the solution? </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Problem : {{solution.problem_id.problem_statement}} <br>
+                    Soluton: {{solution.title}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="/codingproblems/deletesolution/{{solution.pk}}/" method="post">
+                        {% csrf_token %}
+                        <input type="submit"  class="btn btn-danger" value="Delete" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab"
+                aria-controls="nav-home" aria-selected="true">Explanation</a>
+            <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab"
+                aria-controls="nav-profile" aria-selected="false">Code</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active  pt-3" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="bg-light">
+                {{solution.description|safe}}
+            </div>
+        </div>
+        <div class="tab-pane fade pt-3" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <h3><span class="badge bg-success">#{{solution.language}}</span></h3>
+            <code>
+                <pre class="language-{{solution.language}}">{{solution.code}}</pre>
+            </code>
+
+        </div>
+    </div>
+
+
+    {% endblock %}

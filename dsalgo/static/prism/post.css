@@ -1,0 +1,9 @@
+.inline-code{
+    background-color: rgb(224, 221, 221);
+    color: black;
+    border: 0px solid black;
+    border-radius: 4px;
+}
+code {
+    white-space:pre-line
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+{% extends "base.html" %}
+{% load searchurl %}
+{% block style %}
+<style>
+  #fixedbutton1 {
+    position: fixed;
+    top: 100px;
+    right: 25px;
+  }
+
+  #fixedbutton2 {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .link-text {
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
+{% block section1active %}
+{% if heading == "Section1" %} active {% endif %}
+{% endblock %}
+{% block section2active %}
+{% if heading == "Section2" %} active {% endif %}
+{% endblock %}
+{% block miscellaneousactive %}
+{% if heading == "Miscellaneous" %} active {% endif %}
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+
+  {% if messages %}
+  <div class="" style="width: 100%;">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show mt-3"
+      style="width:100%" role="alert">
+
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <!-- <h1>{{heading}}</h1> -->
+  <div class="accordion my-3" id="accordionExample">
+    {% for category_wise_list in problems_list %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{forloop.counter}}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapse{{forloop.counter}}">
+          {{category_wise_list.category}} <span class="badge bg-info text-dark mx-3">{{category_wise_list.no_of_solved_problems}}/{{category_wise_list.problems|length}}</span>
+        </button>
+      </h2>
+      <div id="collapse{{forloop.counter}}" class="accordion-collapse collapse" aria-labelledby="heading{{forloop.counter}}" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <ul class="list-group">
+          {% for problem in category_wise_list.problems %}
+          {% if problem.status %}
+          <li class="list-group-item list-group-item-success">{{problem.problem_statement}} 
+            <a href="https://www.google.com/search?q={{problem.problem_statement|searchurl}} {{problem.cat.cat|searchurl}}" class="btn btn-primary btn-sm" type="button" target="_blank">Google Search</a> 
+            <a href="/codingproblems/newsolution/{{problem.pk}}" class="btn btn-outline-success btn-sm" type="button">Solve Again</a> 
+            <a href="/codingproblems/problem/{{problem.pk}}" class="btn btn-success btn-sm" type="button">View</a> 
+          </li>
+          {% else %}
+          <li class="list-group-item list-group-item-">{{problem.problem_statement}} 
+            <a href="https://www.google.com/search?q={{problem.problem_statement|searchurl}} {{problem.cat.cat|searchurl}}" class="btn btn-primary btn-sm" type="button" target="_blank">Google Search</a> 
+            <a href="/codingproblems/newsolution/{{problem.pk}}" class="btn btn-outline-success btn-sm" type="button">Solve</a> 
+          </li>
+          {% endif %}
+          {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+
+  {% endblock %}
